@@ -1,3 +1,4 @@
+import sys
 import copy
 import math
 
@@ -44,22 +45,58 @@ def cal_stages(y):
 
     return stages
 
-def print_ANF(i, x, y, stages):
-    print(f'* y{i} ANF')
-    print(f'* x3 x2 x1 x0 y{i} S1 S2 S3 S4')
+def _generate_ANF_formula(x, final_stage):
+    formula = ''
+
+    for idx, val in enumerate(final_stage):
+        if val == 1:
+            tmp = ''
+
+            for _idx, _val in enumerate(x[idx]):
+                if _val == 1:
+                    if len(tmp) == 0:
+                        tmp += f'x{_idx}'
+                    else:
+                        tmp += f' * x{_idx}'
+            
+            if len(formula) == 0:
+                formula += tmp
+            else:
+                formula += f' + {tmp}'
+
+    return formula
+
+def print_ANF(num, x, y, stages):
+    print(f' * y{num} ANF')
+    print(f' * x3 x2 x1 x0 y{num} S1 S2 S3 S4')
 
     for i in range(16):
-        print(f'* {x[i][3]}  {x[i][2]}  {x[i][1]}  {x[i][0]}  {y[i]}  {stages[0][i]}  {stages[1][i]}  {stages[2][i]}  {stages[3][i]}')
+        print(f' * {x[i][3]}  {x[i][2]}  {x[i][1]}  {x[i][0]}  {y[i]}  {stages[0][i]}  {stages[1][i]}  {stages[2][i]}  {stages[3][i]}')
 
-    
+    formula = _generate_ANF_formula(x, stages[3])
+    print(f'\n * y{num} = {formula}\n')
 
 def generate_ANFs(sbox):
     NUM = 4
-
-    ys = [[val[i] for val in sbox] for i in range(NUM)]
+    print(sbox)
+    ys = [[int(val[3 - i]) for val in sbox] for i in range(NUM)]
     x = generate_x_permutation(NUM)
 
-    stages_y0 = cal_stages(ys[0])
-    stages_y1 = cal_stages(ys[1])
-    stages_y2 = cal_stages(ys[2])
-    stages_y3 = cal_stages(ys[3])
+    for i in range(NUM):
+        print_ANF(i, x, ys[i], cal_stages(ys[i]))
+
+def _hex_to_binary_str(val):
+    bin_str = str(bin(int(val, base=16)))[2:]
+
+    return (4 - len(bin_str)) * '0' + bin_str
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print('Usage: python script sbox(of form 0x1, ..., 0xC)')
+
+    sbox = sys.argv[1].split(', ')
+
+    sbox = [_hex_to_binary_str(val) for val in sbox]
+
+    generate_ANFs(sbox)
