@@ -59,6 +59,9 @@ def _generate_ANF_formula(x, final_stage):
                     else:
                         tmp += f' * x{_idx}'
             
+            if len(tmp) == 0:
+                tmp = '1'
+            
             if len(formula) == 0:
                 formula += tmp
             else:
@@ -74,7 +77,7 @@ def print_ANF(num, x, y, stages):
         print(f' * {x[i][3]}  {x[i][2]}  {x[i][1]}  {x[i][0]}  {y[i]}  {stages[0][i]}  {stages[1][i]}  {stages[2][i]}  {stages[3][i]}')
 
     formula = _generate_ANF_formula(x, stages[3])
-    print(f'\n * y{num} = {formula}\n')
+    print(f' *\n * y{num} = {formula}\n *')
 
 def generate_ANFs(sbox):
     NUM = 4
