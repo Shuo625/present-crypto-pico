@@ -6,7 +6,7 @@ def print_enslice():
 def print_unslice():
     for i in range(32):
         print(f'tmp = (state_bs[i] >> {i}) & 0x1;')
-        print(f'pt[{i} * CRYPTO_IN_SIZE + i / 8] |= tmp << (i % 8);')
+        print(f'pt[{i} * CRYPTO_IN_SIZE /* which text */ + i / 8 /* which byte */] |= tmp << (i % 8 /* which bit */);')
 
 
 if __name__ == '__main__':
