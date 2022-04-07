@@ -14,5 +14,5 @@ add_executable(pico_present_bs
 pico_enable_stdio_usb(pico_present_bs 1)
 pico_enable_stdio_uart(pico_present_bs 1)
 pico_add_extra_outputs(pico_present_bs)
-target_link_libraries(pico_present_bs pico_stdlib hardware_clocks pico_time)
+target_link_libraries(pico_present_bs pico_stdlib hardware_clocks pico_time pico_multicore)
 
