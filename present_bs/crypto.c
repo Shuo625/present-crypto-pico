@@ -564,6 +564,7 @@ static void encrypt(uint8_t pt[CRYPTO_IN_SIZE * BITSLICE_WIDTH], bs_reg_t state_
 {
     bs_reg_t state_tmp[CRYPTO_IN_SIZE_BIT];
 
+    multicore_reset_core1();
     multicore_launch_core1(encrypt_core1);
 
     multicore_fifo_push_blocking(pt);
